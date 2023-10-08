@@ -19,7 +19,7 @@ You can either use the Visual Studio project template or manually set up your pr
 The project template already has the header files and `loader.lib` (For logging to Stracker's Loader console) linked, so you don't need to do anything else.
 
 #### Visual Studio Project Template
-3. Put the project template in your Visual Studio templates folder. This is usually `C:\Users\{username}\Documents\Visual Studio {version}\Templates\ProjectTemplates\Visual C#`.
+3. Put the project template in your Visual Studio templates folder. This is usually `C:\Users\{username}\Documents\Visual Studio {version}\Templates\ProjectTemplates`.
 4. Open VS2022, create a new project and select the template.
 5. Fill in the details and click create.
 
