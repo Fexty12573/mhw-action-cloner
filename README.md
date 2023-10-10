@@ -49,6 +49,8 @@ Each action has 4 functions which are called at different points in the action's
 You need to provide each one of these functions in your action. If you don't need to do anything in a function, you can just leave it empty.
 
 ### How do I create an action?
+***Note:** The syntax used in these examples requires C++20.*
+
 You register your custom actions in the `initialize_actions` function. You can register as many actions as you want.
 
 In this function you tell the action cloner:
@@ -113,5 +115,28 @@ This code tells the action cloner that the dll wants to provide custom actions f
 
 ### Dynamically adding new actions
 Through the use of the functions detailed above you can only add custom actions at startup. However there is one more function that lets you add custom actions at any point during execution.
+By exporting the `initialize_action_api` you can get access to a function that lets you register custom actions at runtime.
 
-By exporting the `initialize_action_api`
+```cpp
+#include "mh/mh.h"
+
+static AddNewActionListFunc g_add_new_action_list = nullptr;
+
+ACTION_EXPORT void initialize_action_api(AddNewActionListFunc add_new_action_list) {
+    g_add_new_action_list = add_new_action_list;
+}
+
+// Somewhere
+void some_function() {
+    // ActionCloner copies the list so there is no need to heap allocate it.
+    CustomActionList list{
+        .Monster = ...;
+        .Variant = ...;
+        .Actions = { ... };
+    };
+    
+    g_add_new_action_list(&list);
+}
+```
+
+
