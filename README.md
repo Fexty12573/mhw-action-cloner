@@ -58,7 +58,7 @@ In this function you tell the action cloner:
 - The functions you want to use for the action
 
 ```cpp
-#include "mh.h"
+#include "mh/mh.h"
 
 ACTION_EXPORT void initialize_actions(CustomActionList* list) {
     list->Monster = Monster::RuinerNergigante;
@@ -78,3 +78,40 @@ ACTION_EXPORT void initialize_actions(CustomActionList* list) {
 This code registers a new action by the name `MY_CUSTOM_ACTION`. The ID is the next higher unused ID.
 
 Check the RuinerNergigante project for a full example.
+
+### Multiple Monsters per dll
+Normally one `CustomActionList` can only hold actions for one monster. However you can provide custom actions for multiple monsters from a single dll, through the use of the `get_action_list_count` function.
+
+```cpp
+#include "mh/mh.h"
+
+ACTION_EXPORT unsigned int get_action_list_count() {
+    return 3;
+}
+
+ACTION_EXPORT void initialize_actions(CustomActionList* lists) {
+    // Option 1
+    lists[0] = CustomActionList{
+        .Monster = Monster::RuinerNergigante,
+        .Variant = 5,
+        .Actions = { /* ... */ }
+    };
+
+    // Option 2
+    lists[1].Monster = Monster::Teostra;
+    lists[1].Variant = 0;
+
+    lists[1].Actions.push_back({ /* ... */ });
+
+    lists[2].Monster = Monster::FuriousRajang;
+    lists[2].Variant = 5;
+
+    // ...
+}
+```
+This code tells the action cloner that the dll wants to provide custom actions for 3 different monsters.
+
+### Dynamically adding new actions
+Through the use of the functions detailed above you can only add custom actions at startup. However there is one more function that lets you add custom actions at any point during execution.
+
+By exporting the `initialize_action_api`
