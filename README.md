@@ -1,6 +1,9 @@
 # mhw-action-cloner
 A plugin/framework to create new monster actions for Monster Hunter World.
 
+**Warning:** This tool does not aim to be an easy-to-use way of copy-pasting actions from one monster to another. The target audience is people who add new monsters to the game or modify existing ones (on a more extensive level).
+To properly make use of this you will **have to** do some reverse engineering to look at how existing actions work, or how to make use of the base action. See [Animations](#animations) for more details.
+
 ## Installation
 ### For Users
 If you want to install this to use custom actions other people have made, follow these steps:
@@ -139,4 +142,16 @@ void some_function() {
 }
 ```
 
+### Animations
+Unfortunately actions do not have a given way of when and how animations are executed. Each action does is slightly different.
 
+For example, if you take a look at the [RuinerNergigante](https://github.com/Fexty12573/mhw-action-cloner/blob/027b66ebaf04da986ec6b9af3b571e991d3bd88b/RuinerNergigante/CustomActions.cpp#L16) example in the repo, you can see this code:
+```cpp
+void special_arm_l::on_execute(Action* action, OnExecuteFunc parent_func, OnExecuteFunc base_func) {
+    action->get<u32>(0x1B0) = Action::make_animation_id(1, 23);
+    did_spikes = false;
+    parent_func(action);
+}
+```
+
+Here an animation id [1, 23] is assigned to `0x1B0` inside the action. For this particular action, this is where the animation Id is stored. By calling the `parent_func` inside the `on_initialize`, this animation is executed instead of the one that it normally would. However as said before, this doesn't apply to all actions. Actions that make use of multiple animations for example usually have an array of all the animation ids stored somewhere inside the action.
