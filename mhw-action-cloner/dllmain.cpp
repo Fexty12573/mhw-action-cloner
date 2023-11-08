@@ -69,7 +69,7 @@ CreateHook(MH::ActionController::SetActionSet, SetActionSetHook, void, Monster* 
 static void initialize() {
     // Patch out a `jmp` instruction that would otherwise crash the game
     // We will execute this code manually in our hook
-    memory::Patch((void*)0x141c18776, { 0xC3, 0xCC, 0xCC, 0xCC, 0xCC });
+    memory::Patch((void*)0x141bfc286, { 0xC3, 0xCC, 0xCC, 0xCC, 0xCC });
 
     ActionCloner::get()->initialize();
 

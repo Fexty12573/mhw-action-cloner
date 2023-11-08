@@ -78,10 +78,10 @@ private:
 
     asmjit::JitRuntime m_runtime{};
 
-    static inline const OnInitFunc s_base_on_initialize = (OnInitFunc)0x14023d5d0;
-    static inline const OnExecuteFunc s_base_on_execute = (OnExecuteFunc)0x1402a5ef0;
-    static inline const OnUpdateFunc s_base_on_update = (OnUpdateFunc)0x1402a7250;
-    static inline const OnEndFunc s_base_on_end = (OnEndFunc)0x1402a63e0;
+    static inline const OnInitFunc s_base_on_initialize = (OnInitFunc)0x142f14a58;
+    static inline const OnExecuteFunc s_base_on_execute = (OnExecuteFunc)0x142f14a60;
+    static inline const OnUpdateFunc s_base_on_update = (OnUpdateFunc)0x142f14a68;
+    static inline const OnEndFunc s_base_on_end = (OnEndFunc)0x142f14a70;
 
     static constexpr inline const char* s_action_dll_path = "./nativePC/plugins/actions";
     static std::shared_ptr<ActionCloner> s_instance;

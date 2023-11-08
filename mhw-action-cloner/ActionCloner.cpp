@@ -258,7 +258,7 @@ void ActionCloner::add_new_action_list(CustomActionList* list) {
 }
 
 void ActionCloner::set_action_set_fixup(Monster* m) {
-    ((void(*)(void*))0x141c18300)(m);
+    ((void(*)(void*))0x141bfbe10)(m);
 }
 
 InternalAction* ActionCloner::find_action(Monster* m, Action* a, Action::VtableIndex func_type) {
