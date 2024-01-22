@@ -40,10 +40,13 @@ std::shared_ptr<ActionCloner> ActionCloner::get() {
 ActionCloner::ActionCloner() {
     m_set_action_set_hook = std::make_unique<utility::FunctionHook>(MH::ActionController::SetActionSet, &set_action_set_hook);
     m_monster_dtor_hook = std::make_unique<utility::FunctionHook>(MH::Monster::dtor, &monster_dtor_hook);
-    m_text_input_hook = std::make_unique<utility::FunctionHook>(MH::sMhInputText::Dispatch, &text_input_hook);
     m_set_action_set_hook->enable();
     m_monster_dtor_hook->enable();
+
+#ifdef _DEBUG
+    m_text_input_hook = std::make_unique<utility::FunctionHook>(MH::sMhInputText::Dispatch, &text_input_hook);
     m_text_input_hook->enable();
+#endif
 }
 
 void ActionCloner::initialize() {
@@ -104,7 +107,8 @@ void ActionCloner::set_action_set_hook(Monster* thisptr, u32 set_id, ActionTable
         return nullptr;
     };
 
-    if (!thisptr->GetDTI()->InheritsFrom("uEnemy")) {
+    const auto dti = thisptr->GetDTI();
+    if (!dti->InheritsFrom("uEnemy") && dti->InheritsFrom("uPlayer")) {
         cloner->m_set_action_set_hook->call_original<void>(thisptr, set_id, table, count, ac_idx);
         return set_action_set_fixup(thisptr);
     }
