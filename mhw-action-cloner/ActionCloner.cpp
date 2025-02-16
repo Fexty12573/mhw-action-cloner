@@ -108,7 +108,7 @@ void ActionCloner::set_action_set_hook(Monster* thisptr, u32 set_id, ActionTable
     };
 
     const auto dti = thisptr->GetDTI();
-    if (!dti->InheritsFrom("uEnemy") && dti->InheritsFrom("uPlayer")) {
+    if (!dti->InheritsFrom("uEnemy") /* && dti->InheritsFrom("uPlayer") */) {
         cloner->m_set_action_set_hook->call_original<void>(thisptr, set_id, table, count, ac_idx);
         return set_action_set_fixup(thisptr);
     }
@@ -262,7 +262,7 @@ void ActionCloner::add_new_action_list(CustomActionList* list) {
 }
 
 void ActionCloner::set_action_set_fixup(Monster* m) {
-    ((void(*)(void*))0x141bfbe10)(m);
+    ((void(*)(void*))0x141bfcbe0)(m);
 }
 
 InternalAction* ActionCloner::find_action(Monster* m, Action* a, Action::VtableIndex func_type) {

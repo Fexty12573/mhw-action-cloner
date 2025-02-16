@@ -69,9 +69,15 @@ CreateHook(MH::ActionController::SetActionSet, SetActionSetHook, void, Monster* 
 static void initialize() {
     // Patch out a `jmp` instruction that would otherwise crash the game
     // We will execute this code manually in our hook
-    memory::Patch((void*)0x141bfc286, { 0xC3, 0xCC, 0xCC, 0xCC, 0xCC });
+    memory::Patch((void*)0x141bfd056, { 0xC3, 0xCC, 0xCC, 0xCC, 0xCC }); // Old: 0x141bfc286
 
-    ActionCloner::get()->initialize();
+	try {
+		ActionCloner::get()->initialize();
+	}
+	catch (const std::exception& e) {
+		loader::LOG(loader::ERR) << "Failed to initialize ActionCloner: " << e.what();
+		return;
+	}
 
 	loader::LOG(loader::INFO) << "MHWActionCloner Ready";
 }
